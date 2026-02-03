@@ -1,8 +1,6 @@
 name: Update Rain Radar
 on:
-  schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: # הפעלה ידנית בלבד כרגע לבדיקה
 
 jobs:
   update:
@@ -14,15 +12,13 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: |
-          pip install requests numpy pillow
+        run: pip install requests numpy pillow  # התקנה ישירה בלי קובץ חיצוני
       - name: Run Radar Analysis
+        run: python backend/radar_processor.py || python radar_processor.py
+      - name: Commit and Push
         run: |
-          python backend/radar_processor.py || python radar_processor.py
-      - name: Commit and Push changes
-        run: |
-          git config --global user.name 'Radar Bot'
-          git config --global user.email 'bot@radar.com'
-          git add latest_analysis.json
-          git commit -m "Update radar data" || exit 0
+          git config --global user.name 'bot'
+          git config --global user.email 'bot@bot.com'
+          git add .
+          git commit -m "update" || exit 0
           git push
