@@ -15,10 +15,9 @@ jobs:
           python-version: '3.10'
       - name: Install dependencies
         run: |
-          pip install requests numpy pillow  # התקנה ישירה בלי requirements.txt
+          pip install requests numpy pillow
       - name: Run Radar Analysis
         run: |
-          # פקודה שבודקת איפה הקובץ ומריצה אותו בכל מקרה
           python backend/radar_processor.py || python radar_processor.py
       - name: Commit and Push changes
         run: |
