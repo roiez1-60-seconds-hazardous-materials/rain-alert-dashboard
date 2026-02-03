@@ -1,0 +1,29 @@
+name: Update Rain Radar
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # רץ כל 10 דקות
+  workflow_dispatch: # מאפשר הפעלה ידנית
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run Radar Analysis
+        run: |
+          python backend/radar_processor.py
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'Radar Bot'
+          git config --global user.email 'bot@radar.com'
+          git add latest_analysis.json
+          git commit -m "Update radar data" || exit 0
+          git push
